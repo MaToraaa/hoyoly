@@ -1,103 +1,140 @@
-import Image from "next/image";
+"use client";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getUsers } from "@/lib/actions";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import FormProfile from "@/components/FormProfile";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  type Ifaq = {
+    q: string;
+    a: string | React.ReactNode;
+  };
+  const faq: Ifaq[] = [
+    {
+      q: "Is this safe?",
+      a: "There should be no issues, automated check-in exists for years and there hasn't been any reports about hoyo doing anything against it",
+    },
+    {
+      q: "How To Get ITUID and ITOKEN?",
+      a: (
+        <p>
+          If you need instruction about how to get ITUID and ITOKEN u could <Button onClick={() => setOpen(true)}>Click On Here</Button>
+        </p>
+      ),
+    },
+    {
+      q: "Error not logged in",
+      a: (
+        <p>
+          This is a common issue even if you seem to get the cookies right. Here&apos;s another method to get your cookies :{" "}
+          <a className='text-indigo-700 underline' href='https://gist.github.com/torikushiii/59eff33fc8ea89dbc0b2e7652db9d3fd'>
+            https://gist.github.com/torikushiii/59eff33fc8ea89dbc0b2e7652db9d3fd
+          </a>
+          Just copy everything and paste to the COOKIE secret{" "}
+        </p>
+      ),
+    },
+  ];
+  const [open, setOpen] = useState(false);
+  const [users, setUsers] = useState<Iprofiles[]>([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        const res = await getUsers();
+        setUsers(res);
+      } catch (error) {
+        console.log("🚀 ~ getData ~ error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getData();
+  }, []);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <>
+      <Dialog open={open} onOpenChange={() => setOpen(false)}>
+        <DialogContent className='p-10'>
+          <DialogHeader>
+            <DialogTitle>Way u can get TOKEN</DialogTitle>
+            <DialogDescription>awawawa</DialogDescription>
+          </DialogHeader>
+          <div className='flex justify-center translate-x-3 overflow-ellipsis'>
+            <ol className='list-decimal space-y-4'>
+              <li>Open HoYoLAB and login if you haven&apos;t (obviously)</li>
+              <li>Open dev tool (Press f12 or right click then Inspect)</li>
+              <li>
+                For Chromium users, click on the Application tab. If not found, click on the arrow.
+                <br /> For Firefox/Gecko-based browsers, click on the Storage tab.
+              </li>
+              <li>On the filter box, type v2. You might want to expand the dev tools to see clearly.</li>
+              <li>Find ltoken_v2 and ltuid_v2, click on them, and copy the value below.</li>
+            </ol>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <div className='h-screen w-full dark:bg-black bg-white  dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative flex flex-col items-center justify-center'>
+        {/* Radial gradient for the container to give a faded look */}
+        <div className='absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]'></div>
+        <p className='text-4xl sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-slate-500 to-neutral-500 py-8'>
+          Auto Hoyolab Daily <span className='bg-transparent text-white'>✅</span>
+        </p>
+        <FormProfile />
+      </div>
+      <div className='container mx-auto p-5 py-20'>
+        <h2 className='text-4xl font-mono'>FAQ</h2>
+        {faq &&
+          faq.map((f: Ifaq, i) => (
+            <Accordion key={i} type='single' collapsible>
+              <AccordionItem value={`item-${i}`}>
+                <AccordionTrigger className='text-lg'>{f.q}</AccordionTrigger>
+                <AccordionContent className='text-base whitespace-pre-wrap'>{f.a}</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ))}
+      </div>
+      <div className='flex gap-10 flex-col items-center justify-center py-20 px-10 bg-neutral-50'>
+        <div className='text-center'>
+          <h2 className='text-4xl font-mono'>Our User</h2>
+          <p>( {users?.length || 0} )</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <div className='flex gap-4 flex-wrap justify-center'>
+          {loading && (
+            <div>
+              Loading...
+            </div>
+          )}
+          {users &&
+            users.map((u, i) => (
+              <Card key={i}>
+                <CardHeader className='pb-2 flex flex-row gap-2'>
+                  <Avatar>
+                    <AvatarImage src='https://github.com/shadcn.png' />
+                    <AvatarFallback>GI</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <CardTitle>{u.accountName}</CardTitle>
+                    <CardDescription>{moment(u.createdAt).format("MMMM Do")}</CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {u.genshin ? <Badge variant='outline'>{u.genshin}Genshin</Badge> : ""}
+                  {u.honkai_3 ? <Badge variant='outline'>{u.honkai_3}Honkai</Badge> : ""}
+                  {u.honkai_star_rail ? <Badge variant='outline'>{u.honkai_star_rail}Star Rail</Badge> : ""}
+                </CardContent>
+              </Card>
+            ))}
+        </div>
+      </div>
+    </>
   );
 }
