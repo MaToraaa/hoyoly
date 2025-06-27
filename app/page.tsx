@@ -100,7 +100,7 @@ export default function Home() {
         {/* Radial gradient for the container to give a faded look */}
         <div className='absolute -z-10 pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]'></div>
 
-        <main className='grid grid-cols-4 gap-4 max-lg::flex max-md:flex-col'>
+        <main className='grid grid-cols-4 gap-4 max-lg:flex max-md:flex-col'>
           <div className='col-span-3'>
             <Card className='col-start-3 h-full'>
               <CardContent className='grid gap-2 p-4'>
