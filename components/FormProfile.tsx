@@ -138,7 +138,7 @@ const FormProfile = ({ edit, id }: { edit?: boolean; id?: string }) => {
   return (
     <div>
       <Dialog onOpenChange={() => setisOpen({ ...isOpen, first: !isOpen.first })} open={edit || isOpen.first}>
-        {!edit && <DialogTrigger className='text-3xl border p-3 px-4 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-all duration-300'>Try One!</DialogTrigger>}
+        {!edit && <DialogTrigger className='text-xl transition-all duration-300 text-primary bg-background p-2 px-4 rounded-4xl font-bold hover:bg-foreground/10'>Add Account &gt;</DialogTrigger>}
         <DialogContent>
           {edit && (
             <div className='absolute right-4 z-50 top-4'>

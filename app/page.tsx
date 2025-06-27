@@ -9,6 +9,9 @@ import FormProfile from "@/components/FormProfile";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
   type Ifaq = {
@@ -24,7 +27,10 @@ export default function Home() {
       q: "How To Get ITUID and ITOKEN?",
       a: (
         <p>
-          If you need instruction about how to get ITUID and ITOKEN u could <Button onClick={() => setOpen(true)}>Click On Here</Button>
+          If you need instruction about how to get ITUID and ITOKEN u could{" "}
+          <Button variant={"outline"} size={"sm"} onClick={() => setOpen(true)}>
+            Click On Here
+          </Button>
         </p>
       ),
     },
@@ -43,7 +49,8 @@ export default function Home() {
   ];
   const [open, setOpen] = useState(false);
   const [users, setUsers] = useState<Iprofiles[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
   useEffect(() => {
     const getData = async () => {
       try {
@@ -82,29 +89,130 @@ export default function Home() {
         </DialogContent>
       </Dialog>
 
-      <div className='h-screen w-full dark:bg-black bg-white  dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative flex flex-col items-center justify-center'>
+      <div className='min-h-screen  w-full relative flex pb-10 px-20 flex-col '>
+        <nav className=''>
+          <h1 className='text-primary flex items-center gap-1 text-4xl z-50 my-3 p-2 px-4 w-fit font-extrabold tracking-wide bg-background rounded-2xl'>
+            <Image src={"/hoyolab.gif"} alt='Hoyolab' className='rounded-4xl' width={50} height={50} />
+            Hoyoly
+          </h1>
+        </nav>
+
         {/* Radial gradient for the container to give a faded look */}
-        <div className='absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]'></div>
-        <p className='text-4xl sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-slate-500 to-neutral-500 py-8'>
-          Auto Hoyolab Daily <span className='bg-transparent text-white'>✅</span>
-        </p>
-        <FormProfile />
+        <div className='absolute -z-10 pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]'></div>
+
+        <main className='grid grid-cols-4 gap-4 max-lg::flex max-md:flex-col'>
+          <div className='col-span-3'>
+            <Card className='col-start-3 h-full'>
+              <CardContent className='grid gap-2 p-4'>
+                <h1 className='text-4xl sm:text-6xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-slate-500 to-neutral-500 pt-8'>Welcome to Hoyoly ツ</h1>
+                <p className='text-muted-foreground text-base'>Your best Hoyoverse Support!</p>
+                <h2 className='font-bold text-2xl py-2'>How to use?</h2>
+                <p>Hoyoly helps you to automate your daily sign in with only using your cookies and then help you sign in every single day ✅.</p>
+                <ul className='space-y-1'>
+                  <li>◇ Log in to hoyolab official site and receive your token</li>
+                  <li>◇ Press add button below</li>
+                  <li>◇ Paste your Token and put on form</li>
+                  <li>◇ Voila its done.</li>
+                </ul>
+                <div className='py-2'>
+                  <FormProfile />
+                </div>
+                <h2 className='font-bold text-2xl py-2'>How to update my data?</h2>
+                <p>By put your unique &quot;id&quot; in end of our domain &quot;/&quot;, you can see detail your profile. You can also delete or update your profile.</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className='col-span-1 grid gap-4'>
+            <Card className='min-w-sm'>
+              <CardHeader>
+                <CardTitle className=''>Users</CardTitle>
+                <CardDescription>People that use our services</CardDescription>
+              </CardHeader>
+              <CardContent className='grid gap-2'>
+                {loading && <div>Fetching Data...</div>}
+                {users &&
+                  users.slice(0, 5).map((u, i) => (
+                    <div className='flex gap-2' key={i}>
+                      <Avatar>
+                        <AvatarImage src='https://github.com/shadcn.png' />
+                        <AvatarFallback>GI</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <span className='mr-1 font-bold '>{u.accountName}</span>
+                        {u.honkai_3 ? (
+                          <Badge className='text-primary' variant='secondary'>
+                            {u.honkai_3}Honkai
+                          </Badge>
+                        ) : (
+                          ""
+                        )}
+                        {u.honkai_star_rail ? (
+                          <Badge className='text-primary' variant='secondary'>
+                            {u.honkai_star_rail}Star Rail
+                          </Badge>
+                        ) : (
+                          ""
+                        )}
+                        {u.genshin ? (
+                          <Badge className='text-primary' variant='secondary'>
+                            {u.genshin}Genshin
+                          </Badge>
+                        ) : (
+                          ""
+                        )}
+                        <CardDescription>{moment(u.createdAt).format("MMMM Do")}</CardDescription>
+                      </div>
+                    </div>
+                  ))}
+                <Button variant={"outline"} onClick={() => router.push("/users")} className='mt-3 font-bold'>
+                  See all users &gt;
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className='min-w-sm'>
+              <CardHeader>
+                <CardTitle>FAQ</CardTitle>
+                <CardDescription>Frequently Question</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Accordion type='single' collapsible className='w-full' defaultValue='item-0'>
+                  {faq &&
+                    faq.map((f: Ifaq, i) => (
+                      <AccordionItem key={i} value={`item-${i}`}>
+                        <AccordionTrigger className='font-bold tracking-wide'>{f.q}</AccordionTrigger>
+                        <AccordionContent className=' whitespace-pre-wrap'>{f.a}</AccordionContent>
+                      </AccordionItem>
+                    ))}
+                </Accordion>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+
+        <footer className='mt-3 flex max-md:flex-col gap-3 justify-between'>
+          <p className='font-bold'>
+            Hoyoly is not affiliated with HoYoverse nor Hoyolab.
+            <br /> Genshin Impact, any game content and materials are trademarks and copyrights of HoYoverse.
+          </p>
+          <p>
+            <Link className='hover:underline text-muted-foreground font-bold text-sm' href={"/tos"}>
+              {" "}
+              Terms of Service{" "}
+            </Link>
+            <br />
+            <Link className='hover:underline text-muted-foreground font-bold text-sm' href={"/policy"}>
+              {" "}
+              Privacy Policy.
+            </Link>
+          </p>
+        </footer>
       </div>
-      <div className='container mx-auto p-5 py-20'>
-        <h2 className='text-4xl font-mono'>FAQ</h2>
-        {faq &&
-          faq.map((f: Ifaq, i) => (
-            <Accordion key={i} type='single' collapsible>
-              <AccordionItem value={`item-${i}`}>
-                <AccordionTrigger className='text-lg'>{f.q}</AccordionTrigger>
-                <AccordionContent className='text-base whitespace-pre-wrap'>{f.a}</AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          ))}
-      </div>
-      <div className='flex gap-10 flex-col items-center justify-center py-20 px-10 bg-neutral-50'>
+
+      {/* <div className='flex gap-10 flex-col items-center justify-center py-20 px-10 bg-neutral-50'>
         <div className='text-center'>
-          <h2 className='text-4xl font-mono'>Our User</h2>
+        <h2 className='text-4xl font-mono'>Our User</h2>
           <p>( {users?.length || 0} )</p>
         </div>
         <div className='flex gap-4 flex-wrap justify-center'>
@@ -134,7 +242,7 @@ export default function Home() {
               </Card>
             ))}
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
