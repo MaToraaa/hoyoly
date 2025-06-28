@@ -89,7 +89,7 @@ export default function Home() {
         </DialogContent>
       </Dialog>
 
-      <div className='min-h-screen  w-full relative flex pb-10 px-20 flex-col '>
+      <div className='min-h-screen  w-full relative flex pb-10 px-20 max-md:px-4 flex-col '>
         <nav className=''>
           <h1 className='text-primary flex items-center gap-1 text-4xl z-50 my-3 p-2 px-4 w-fit font-extrabold tracking-wide bg-background rounded-2xl'>
             <Image src={"/hoyolab.gif"} alt='Hoyolab' className='rounded-4xl' width={50} height={50} />
