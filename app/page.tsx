@@ -39,9 +39,9 @@ export default function Home() {
       a: (
         <p>
           This is a common issue even if you seem to get the cookies right. Here&apos;s another method to get your cookies :{" "}
-          <a className='text-indigo-700 underline' href='https://gist.github.com/torikushiii/59eff33fc8ea89dbc0b2e7652db9d3fd'>
+          <a className='text-blue-400 underline' href='https://gist.github.com/torikushiii/59eff33fc8ea89dbc0b2e7652db9d3fd'>
             https://gist.github.com/torikushiii/59eff33fc8ea89dbc0b2e7652db9d3fd
-          </a>
+          </a><br />
           Just copy everything and paste to the COOKIE secret{" "}
         </p>
       ),
@@ -82,20 +82,26 @@ export default function Home() {
                   HoYoLAB Official Website
                 </Link>
                 &nbsp;and login if you haven&apos;t (obviously)
-                <Link href={"/zoom/h1"}>
+                <Link className="cursor-zoom-in" href={"/zoom/h1"}>
                   <Image className='rounded-2xl' width={200} height={200} alt='image1' src={"/h1.png"} />
                 </Link>
               </li>
               <li>Open dev tool (Press f12 or right click then Inspect)</li>
-              <Image className='rounded-2xl' width={300} height={500} alt='image2' src={"/h2.png"} />
+              <Link className="cursor-zoom-in" href={"/zoom/h2"}>
+                <Image className='rounded-2xl' width={200} height={200} alt='image2' src={"/h2.png"} />
+              </Link>
 
               <li>
                 For Chromium users, click on the Application tab. If not found, click on the arrow.
                 <br /> For Firefox/Gecko-based browsers, click on the Storage tab.
-                <Image className='rounded-2xl' width={300} height={500} alt='image3' src={"/h3.png"} />
+                <Link className="cursor-zoom-in" href={"/zoom/h3"}>
+                  <Image className='rounded-2xl' width={200} height={200} alt='image3' src={"/h3.png"} />
+                </Link>
               </li>
               <li>On the side bar expand the cookies tab and click on hoyolab.com</li>
-              <Image className='rounded-2xl' width={300} height={500} alt='image4' src={"/h4.png"} />
+                <Link className="cursor-zoom-in" href={"/zoom/h4"}>
+                  <Image className='rounded-2xl' width={200} height={200} alt='image4' src={"/h4.png"} />
+                </Link>
               <li>Find ltoken_v2 and ltuid_v2, click on them, and copy the value.</li>
             </ol>
           </div>
@@ -130,6 +136,8 @@ export default function Home() {
                 <div className='py-2'>
                   <FormProfile />
                 </div>
+                <h2 className='font-bold text-2xl py-2'>How does it works?</h2>
+                <p className="md:max-w-4xl">Everytime u press sign in on hoyolab will sending request to their API, Hoyoly do the same thing, we use your cookie so pretend like you and sending request to their api, we use Google Apps Script to schedule it every 03:00(utc+8)  </p>
                 <h2 className='font-bold text-2xl py-2'>How to update my data?</h2>
                 <p>By put your unique &quot;id&quot; in end of our domain &quot;/&quot;, you can see detail your profile. You can also delete or update your profile.</p>
               </CardContent>
@@ -195,7 +203,7 @@ export default function Home() {
                     faq.map((f: Ifaq, i) => (
                       <AccordionItem key={i} value={`item-${i}`}>
                         <AccordionTrigger className='font-bold tracking-wide'>{f.q}</AccordionTrigger>
-                        <AccordionContent className=' whitespace-pre-wrap'>{f.a}</AccordionContent>
+                        <AccordionContent className=' whitespace-pre-line'>{f.a}</AccordionContent>
                       </AccordionItem>
                     ))}
                 </Accordion>
