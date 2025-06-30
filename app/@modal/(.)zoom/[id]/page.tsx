@@ -1,6 +1,6 @@
 "use client";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import Image from "next/image";
+// import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 

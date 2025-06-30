@@ -25,14 +25,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html suppressHydrationWarning lang='en'>
       <body className={`antialiased`}>
         <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
           <Toaster expand className='z-[1000]' richColors />
+          {modal}
           {children}
         </ThemeProvider>
       </body>
