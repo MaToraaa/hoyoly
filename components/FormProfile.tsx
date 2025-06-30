@@ -39,12 +39,13 @@ const FormProfile = ({ edit, id }: { edit?: boolean; id?: string }) => {
     term1: false,
     term2: false,
   });
+  const [Safe, setSafe] = useState(false);
 
   const handleDelete = async () => {
     const status = await deleteUser(id!);
-    console.log("🚀 ~ handleDelete ~ status:", status)
+    console.log("🚀 ~ handleDelete ~ status:", status);
     toast.error("Profile Deleted");
-    redirect('/')
+    redirect("/");
   };
   const handleSave = async () => {
     if (edit) {
@@ -68,32 +69,36 @@ const FormProfile = ({ edit, id }: { edit?: boolean; id?: string }) => {
         });
         const status = await res.json();
         setProfile({ ...profile, _id: status.message._id });
+        toast.success("Success", {
+          description: "Your Profile has been saved, Now you can see the result every day",
+        });
+        setToken({ itoken: "", ituid: "" });
+        setProfile({ ...profile, accountName: "" });
       } catch (error) {
         console.log("🚀 ~ handleSave ~ error:", error);
         toast.error("Oops", {
           description: "There has a problem",
         });
+      } finally {
+        setisOpen({ ...isOpen, first: false, second: false, third: true });
+        setIsLoading(false);
       }
     }
-    setIsLoading(false);
-    setisOpen({ ...isOpen, first: false, second: false, third: true });
-    toast.success("Success", {
-      description: "Your Profile has been saved, Now you can see the result every day",
-    });
   };
   const checkError = () => {
-    if (!profile.genshin && !profile.honkai_3 && !profile.honkai_star_rail) {
-      setIsLoading(true);
-      setError("Check atleast on game!");
-    } else if (!profile.accountName) {
+    if (!profile.accountName) {
       setError("Fill Your Account Name");
       setIsLoading(true);
     } else if (!token.itoken || !token.ituid) {
       setError("Input Your Token");
+      setIsLoading(true);
+    } else if (!profile.genshin && !profile.honkai_3 && !profile.honkai_star_rail) {
+      setIsLoading(true);
+      setError("Check atleast on game!");
     } else {
       setIsLoading(false);
       setError("");
-      return true
+      return true;
     }
   };
   useEffect(() => {
@@ -107,12 +112,12 @@ const FormProfile = ({ edit, id }: { edit?: boolean; id?: string }) => {
     if (error) {
       checkError();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, profile]);
 
   useEffect(() => {
     setProfile({ ...profile, token: `ltoken_v2=${token.itoken};ltuid_v2=${token.ituid}` });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const handleCopy = async () => {
@@ -123,11 +128,18 @@ const FormProfile = ({ edit, id }: { edit?: boolean; id?: string }) => {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      const passed = await checkError()
+      const passed = await checkError();
       if (passed) {
         const res = await autoSignFunction({ accountName: profile.accountName, token: profile.token, genshin: profile.genshin, honkai_3: profile.honkai_3, honkai_star_rail: profile.honkai_star_rail });
         console.log("🚀 ~ handleSubmit ~ res:", res);
         setResponse(res);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        if (Object.entries(res).some(([_, value]) => value.includes("❎"))) {
+          toast.warning("We detected '❎', either turn off toggle game that not logged in or fix it and resubmit :)", { duration: 5000 });
+          setSafe(false);
+        } else {
+          setSafe(true);
+        }
       }
     } catch (error) {
       console.log("🚀 ~ Home ~ error:", error);
@@ -139,7 +151,7 @@ const FormProfile = ({ edit, id }: { edit?: boolean; id?: string }) => {
     <div>
       <Dialog onOpenChange={() => setisOpen({ ...isOpen, first: !isOpen.first })} open={edit || isOpen.first}>
         {!edit && <DialogTrigger className='text-xl transition-all duration-300 text-primary bg-background p-2 px-4 rounded-4xl font-bold hover:bg-foreground/10'>Add Account &gt;</DialogTrigger>}
-        <DialogContent className="px-4">
+        <DialogContent className='px-4'>
           {edit && (
             <div className='absolute right-4 z-50 top-4'>
               <div className='bg-green-600 w-4 h-4 rounded-full'></div>
@@ -165,17 +177,17 @@ const FormProfile = ({ edit, id }: { edit?: boolean; id?: string }) => {
                 <div className='flex items-center space-x-2'>
                   <Switch checked={profile.genshin} onCheckedChange={(checked) => setProfile({ ...profile, genshin: checked })} id='genshin' />
                   <Label htmlFor='genshin'>Genshin</Label>
-                  {response?.genshin && <p className='text-sm bg-slate-200 p-2 rounded-lg'> {response?.genshin}</p>}
+                  {response?.genshin && <p className='text-sm bg-muted p-2 rounded-lg'> {response?.genshin}</p>}
                 </div>
                 <div className='flex items-center space-x-2'>
                   <Switch checked={profile.honkai_3} onCheckedChange={(checked) => setProfile({ ...profile, honkai_3: checked })} id='Honkai-3' />
                   <Label htmlFor='Honkai-3'>Honkai_3</Label>
-                  {response?.honkai_3 && <p className='text-sm bg-slate-200 p-2 rounded-lg'> {response?.honkai_3}</p>}
+                  {response?.honkai_3 && <p className='text-sm bg-muted p-2 rounded-lg'> {response?.honkai_3}</p>}
                 </div>
                 <div className='flex items-center space-x-2'>
                   <Switch checked={profile.honkai_star_rail} onCheckedChange={(checked) => setProfile({ ...profile, honkai_star_rail: checked })} id='hsr' />
                   <Label htmlFor='hsr'>Honkai Star Rail</Label>
-                  {response?.honkai_star_rail && <p className='text-sm bg-slate-200 p-2 rounded-lg'> {response?.honkai_star_rail}</p>}
+                  {response?.honkai_star_rail && <p className='text-sm bg-muted p-2 rounded-lg'> {response?.honkai_star_rail}</p>}
                 </div>
               </div>
             </div>
@@ -191,7 +203,7 @@ const FormProfile = ({ edit, id }: { edit?: boolean; id?: string }) => {
               {response && "Re-"}Submit
             </Button>
             {response && (
-              <Button className='flex flex-1' onClick={() => setisOpen({ ...isOpen, second: true })} variant={"outline"} disabled={isLoading}>
+              <Button className='flex flex-1' onClick={() => setisOpen({ ...isOpen, second: true })} variant={"outline"} disabled={isLoading || !Safe}>
                 Save
               </Button>
             )}
@@ -259,7 +271,7 @@ const FormProfile = ({ edit, id }: { edit?: boolean; id?: string }) => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <Button variant={"outline"} onClick={handleCopy} className='relative cursor-pointer rounded-xl text-neutral-500 z-50 w-full'>
+                  <Button variant={"outline"} onClick={handleCopy} className='relative cursor-cpointeropy rounded-xl text-neutral-500 z-50 w-full'>
                     {profile._id ?? "Id Expired, Delete and try again"}
                   </Button>
                 </TooltipTrigger>
@@ -269,11 +281,11 @@ const FormProfile = ({ edit, id }: { edit?: boolean; id?: string }) => {
               </Tooltip>
             </TooltipProvider>
           </div>
-          <DialogFooter className="flex gap-3">
-            <Button onClick={() => router.push("/")} className='flex flex-1'>
+          <DialogFooter className='flex gap-3'>
+            <Button onClick={() => setisOpen({ ...isOpen, third: false })} className='flex flex-1 font-medium tracking-wide'>
               Continue
             </Button>
-            <Button variant={"outline"} onClick={() => router.push(`/${profile._id}`)} className='flex flex-1'>
+            <Button variant={"outline"} onClick={() => router.push(`/${profile._id}`)} className='flex flex-1 font-medium tracking-wide'>
               Visit
             </Button>
           </DialogFooter>

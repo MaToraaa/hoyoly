@@ -105,7 +105,7 @@ export const autoSignFunction = async ({ token, genshin, honkai_star_rail, honka
       if (bannedCheck) {
         response[gameName as IgameName] = `Auto check-in failed due to CAPTCHA blocking.`;
       } else {
-        response[gameName as IgameName] = `${responseJson.retcode == -5003 ? "✅ " + responseJson.message : "❎ " + responseJson.message}`;
+        response[gameName as IgameName] = `${responseJson.retcode == -5003 || responseJson.retcode == 0 ? "✅ " + responseJson.message : "❎ " + responseJson.message}`;
       }
     })
   );

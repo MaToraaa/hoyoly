@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import moment from "moment";
 import { Badge } from "@/components/ui/badge";
-
+import Link from "next/link";
 
 const Page = () => {
   const [users, setUsers] = useState<Iprofiles[]>([]);
@@ -26,8 +26,13 @@ const Page = () => {
   }, []);
   return (
     <main className='container py-10 mx-auto'>
-      <h1 className='font-bold text-3xl text-center mb-10'>Users</h1>
-      <div className="flex gap-4 flex-wrap justify-center">
+      <div className='flex justify-center gap-2'>
+        <Link className='bg-muted p-2 px-4 group h-8 w-12 relative rounded-2xl' href={"/"}>
+          <span className='group-hover:-translate-x-1 right-1/2 translate-x-1/2 top-1/2 font-bold -translate-y-1/2 duration-200 absolute'>{"<"}</span>
+        </Link>
+        <h1 className='font-bold gap-2 text-3xl text-center mb-10'>Users</h1>
+      </div>
+      <div className='flex gap-4 flex-wrap justify-center'>
         {loading && <div>Fetching Data...</div>}
 
         {users &&
@@ -43,10 +48,10 @@ const Page = () => {
                   <CardDescription>{moment(u.createdAt).format("MMMM Do")}</CardDescription>
                 </div>
               </CardHeader>
-              <CardContent>
-                {u.genshin ? <Badge variant='outline'>{u.genshin}Genshin</Badge> : ""}
-                {u.honkai_3 ? <Badge variant='outline'>{u.honkai_3}Honkai</Badge> : ""}
-                {u.honkai_star_rail ? <Badge variant='outline'>{u.honkai_star_rail}Star Rail</Badge> : ""}
+              <CardContent className='flex gap-1'>
+                {u.genshin ? <Badge variant='default'>{u.genshin}Genshin</Badge> : ""}
+                {u.honkai_3 ? <Badge variant='default'>{u.honkai_3}Honkai</Badge> : ""}
+                {u.honkai_star_rail ? <Badge variant='default'>{u.honkai_star_rail}Star Rail</Badge> : ""}
               </CardContent>
             </Card>
           ))}
