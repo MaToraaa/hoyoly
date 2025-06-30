@@ -69,7 +69,7 @@ export default function Home() {
   return (
     <>
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
-        <DialogContent className='dialog-zoom-container md:p-10 max-h-[80vh] overflow-y-scroll scrollbar-hide'>
+        <DialogContent className='dialog-zoom-container px-4 md:p-10 max-h-[80vh] overflow-y-scroll scrollbar-hide'>
           <DialogHeader>
             <DialogTitle>Way u can get TOKEN</DialogTitle>
             <DialogDescription>awawawa</DialogDescription>
