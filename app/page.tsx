@@ -69,21 +69,34 @@ export default function Home() {
   return (
     <>
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
-        <DialogContent className='p-10'>
+        <DialogContent className='dialog-zoom-container p-10 max-h-[80vh] overflow-y-scroll scrollbar-hide'>
           <DialogHeader>
             <DialogTitle>Way u can get TOKEN</DialogTitle>
             <DialogDescription>awawawa</DialogDescription>
           </DialogHeader>
           <div className='flex justify-center translate-x-3 overflow-ellipsis'>
-            <ol className='list-decimal space-y-4'>
-              <li>Open HoYoLAB and login if you haven&apos;t (obviously)</li>
+            <ol className='list-decimal list-outside ml-2 [&>li]:mt-2'>
+              <li>
+                Go to&nbsp;
+                <Link className='underline text-blue-400' href={"https://www.hoyolab.com/home"}>
+                  HoYoLAB Official Website
+                </Link>
+                &nbsp;and login if you haven&apos;t (obviously)
+                <Link href={"/zoom/h1"}>
+                  <Image className='rounded-2xl' width={200} height={200} alt='image1' src={"/h1.png"} />
+                </Link>
+              </li>
               <li>Open dev tool (Press f12 or right click then Inspect)</li>
+              <Image className='rounded-2xl' width={300} height={500} alt='image2' src={"/h2.png"} />
+
               <li>
                 For Chromium users, click on the Application tab. If not found, click on the arrow.
                 <br /> For Firefox/Gecko-based browsers, click on the Storage tab.
+                <Image className='rounded-2xl' width={300} height={500} alt='image3' src={"/h3.png"} />
               </li>
-              <li>On the filter box, type v2. You might want to expand the dev tools to see clearly.</li>
-              <li>Find ltoken_v2 and ltuid_v2, click on them, and copy the value below.</li>
+              <li>On the side bar expand the cookies tab and click on hoyolab.com</li>
+              <Image className='rounded-2xl' width={300} height={500} alt='image4' src={"/h4.png"} />
+              <li>Find ltoken_v2 and ltuid_v2, click on them, and copy the value.</li>
             </ol>
           </div>
         </DialogContent>
@@ -104,7 +117,7 @@ export default function Home() {
           <div className='col-span-3'>
             <Card className='col-start-3 h-full'>
               <CardContent className='grid gap-2 p-4'>
-                <h1 className='text-4xl sm:text-6xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-slate-500 to-neutral-500 pt-8'>Welcome to Hoyoly ツ</h1>
+                <h1 className='text-4xl sm:text-6xl font-bold relative bg-clip-text text-transparent bg-gradient-to-b from-slate-500 to-neutral-500 pt-8'>Welcome to Hoyoly ツ</h1>
                 <p className='text-muted-foreground text-base'>Your best Hoyoverse Support!</p>
                 <h2 className='font-bold text-2xl py-2'>How to use?</h2>
                 <p>Hoyoly helps you to automate your daily sign in with only using your cookies and then help you sign in every single day ✅.</p>
